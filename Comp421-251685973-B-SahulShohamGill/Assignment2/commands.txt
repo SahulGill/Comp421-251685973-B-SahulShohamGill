@@ -1,0 +1,10 @@
+> openssl genrsa -out private_key.pem 2703
+> openssl rsa -in private_key.pem -pubout -out public_key.pem
+
+> openssl req -new -key private_key.pem -out certificate_signing_request.csr
+
+> openssl x509 -req -days 365 -in certificate_signing_request.csr -signkey private_key.pem -out self_signed_certificate.crt
+
+> openssl genrsa -out certification_authority_private_key.pem 2703
+> openssl req -x509 -new -nodes -key certification_authority_private_key.pem -sha256 -days 365 -out certification_authority_certificate.pem
+> openssl x509 -req -in certificate_signing_request.csr -CA certification_authority_certificate.pem -CAkey certification_authority_private_key.pem -CAcreateserial -out issued_certificate.crt -days 365 -sha256
